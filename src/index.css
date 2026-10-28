@@ -1,0 +1,1897 @@
+/* ==========================================================================
+   ScholarTrack — Neo-Brutalist Academic Design System
+   Hand-crafted, authentic, high-contrast, tactile UI with Light & Dark themes
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  /* Light Theme Canvas */
+  --bg-page: #FAF7F2;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F0ECE4;
+  --bg-input: #FFFFFF;
+
+  /* Borders & Shadows */
+  --border-color: #000000;
+  --border-width: 2.5px;
+  --border-width-sm: 2px;
+  --border-subtle: #E2DDD5;
+
+  --shadow-hard: 4px 4px 0px #000000;
+  --shadow-hard-sm: 2.5px 2.5px 0px #000000;
+  --shadow-hard-lg: 6px 6px 0px #000000;
+  --shadow-modal: 8px 8px 0px #000000;
+
+  /* Typography */
+  --text-primary: #000000;
+  --text-secondary: #27272A;
+  --text-muted: #52525B;
+  --text-inverse: #FFFFFF;
+
+  /* Neo-Brutalist Color Palette */
+  --neo-yellow: #FFE600;
+  --neo-mint: #4ADE80;
+  --neo-coral: #FF6B6B;
+  --neo-cyan: #38BDF8;
+  --neo-lavender: #C4B5FD;
+  --neo-pink: #F472B6;
+  --neo-orange: #FB923C;
+
+  /* Primary Brand Button Fill */
+  --primary-accent: #FFE600;
+  --primary-accent-text: #000000;
+
+  /* Status Colors */
+  --danger: #FF6B6B;
+  --danger-subtle: #FFF1F2;
+  --success: #4ADE80;
+  --success-subtle: #F0FDF4;
+
+  /* Dimensions */
+  --sidebar-width: 260px;
+  --topbar-height: 68px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme Canvas */
+  --bg-page: #121214;
+  --bg-surface: #1B1B1F;
+  --bg-subtle: #24242A;
+  --bg-input: #151518;
+
+  /* Crisp White/High-Contrast Borders in Dark Mode */
+  --border-color: #FFFFFF;
+  --border-width: 2.5px;
+  --border-width-sm: 2px;
+  --border-subtle: #3F3F46;
+
+  /* Hard Shadows in Dark Mode with bold depth */
+  --shadow-hard: 4px 4px 0px #000000;
+  --shadow-hard-sm: 2.5px 2.5px 0px #000000;
+  --shadow-hard-lg: 6px 6px 0px #000000;
+  --shadow-modal: 8px 8px 0px #000000;
+
+  /* Typography */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E4E4E7;
+  --text-muted: #A1A1AA;
+  --text-inverse: #000000;
+
+  /* Neo-Brutalist Colors for Dark Mode (punchy & saturated) */
+  --neo-yellow: #FFE600;
+  --neo-mint: #4ADE80;
+  --neo-coral: #FF6B6B;
+  --neo-cyan: #38BDF8;
+  --neo-lavender: #C4B5FD;
+  --neo-pink: #F472B6;
+  --neo-orange: #FB923C;
+
+  --primary-accent: #FFE600;
+  --primary-accent-text: #000000;
+
+  --danger: #FF6B6B;
+  --danger-subtle: #2A171A;
+  --success: #4ADE80;
+  --success-subtle: #122417;
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6,
+.brand-title,
+.calendar-month-title,
+.calendar-agenda-title,
+.welcome-title,
+.metric-big-number,
+.neo-badge,
+.neo-btn,
+.section-title,
+.section-title-large {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   App Shell Layout
+   ========================================================================== */
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.app-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-page);
+  transition: background-color 0.2s ease;
+}
+
+.page-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+@media (max-width: 900px) {
+  .app-main {
+    margin-left: 0;
+  }
+  .page-content {
+    padding: 1.25rem 1rem;
+    gap: 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   Neo-Brutalist Sidebar
+   ========================================================================== */
+
+.app-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-surface);
+  border-right: var(--border-width) solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.2s ease;
+}
+
+.sidebar-header {
+  height: var(--topbar-height);
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-bottom: var(--border-width) solid var(--border-color);
+  background-color: var(--bg-surface);
+}
+
+.brand-logo-neo {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neo-yellow);
+  color: #000000;
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.brand-subtitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mobile-close-btn {
+  margin-left: auto;
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+  }
+  .app-sidebar.open {
+    transform: translateX(0);
+    box-shadow: 10px 0 0 rgba(0, 0, 0, 0.3);
+  }
+  .mobile-close-btn {
+    display: flex;
+  }
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar-backdrop.open {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+    backdrop-filter: blur(2px);
+  }
+}
+
+.sidebar-nav {
+  padding: 1.25rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.neo-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  border: var(--border-width-sm) solid transparent;
+  color: var(--text-secondary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neo-nav-item:hover {
+  background-color: var(--bg-subtle);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 2.5px 2.5px 0px var(--border-color);
+}
+
+.neo-nav-item.active {
+  background-color: var(--neo-yellow);
+  color: #000000;
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-hard-sm);
+  transform: translate(-1.5px, -1.5px);
+}
+
+.nav-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.neo-nav-counter {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background-color: var(--text-primary);
+  color: var(--text-inverse);
+  border: 1.5px solid var(--border-color);
+}
+
+.neo-nav-item.active .neo-nav-counter {
+  background-color: #000000;
+  color: #FFFFFF;
+  border-color: #000000;
+}
+
+.sidebar-footer {
+  padding: 1rem 0.85rem;
+  border-top: var(--border-width) solid var(--border-color);
+  background-color: var(--bg-subtle);
+}
+
+.neo-user-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neo-user-card:hover,
+.neo-user-card.active {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3.5px 3.5px 0px var(--border-color);
+  background-color: var(--neo-lavender);
+  color: #000000;
+}
+
+.neo-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neo-cyan);
+  color: #000000;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-color);
+}
+
+.neo-user-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.neo-user-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.neo-user-card:hover .neo-user-name,
+.neo-user-card.active .neo-user-name {
+  color: #000000;
+}
+
+.neo-user-role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.neo-user-card:hover .neo-user-role,
+.neo-user-card.active .neo-user-role {
+  color: #27272A;
+}
+
+/* ==========================================================================
+   Neo-Brutalist Topbar
+   ========================================================================== */
+
+.app-topbar {
+  height: var(--topbar-height);
+  background-color: var(--bg-surface);
+  border-bottom: var(--border-width) solid var(--border-color);
+  padding: 0 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  transition: background-color 0.2s ease;
+}
+
+@media (max-width: 600px) {
+  .app-topbar {
+    padding: 0 1rem;
+  }
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+}
+
+.neo-date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background-color: var(--bg-subtle);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.live-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10B981;
+  border: 1px solid var(--border-color);
+  display: inline-block;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.6;
+  }
+}
+
+.date-pill-sep {
+  opacity: 0.35;
+  margin: 0 0.15rem;
+}
+
+.date-pill-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .date-pill-text-full {
+    display: none;
+  }
+  .date-pill-text-short {
+    display: inline;
+  }
+}
+
+@media (min-width: 769px) {
+  .date-pill-text-full {
+    display: inline;
+  }
+  .date-pill-text-short {
+    display: none;
+  }
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle-neo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+}
+
+.toggle-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .toggle-label {
+    display: none;
+  }
+  .add-event-btn span {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Neo-Brutalist Buttons & Badges
+   ========================================================================== */
+
+.neo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-hard-sm);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
+}
+
+.neo-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--border-color);
+}
+
+.neo-btn-primary {
+  background-color: var(--neo-yellow);
+  color: #000000;
+}
+
+.neo-btn-primary:hover {
+  background-color: #FFDD00;
+  color: #000000;
+}
+
+.neo-btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.neo-btn-secondary:hover {
+  background-color: var(--bg-subtle);
+}
+
+.neo-btn-danger {
+  background-color: var(--neo-coral);
+  color: #000000;
+}
+
+.neo-btn-danger:hover {
+  background-color: #FF5252;
+}
+
+.neo-btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+.neo-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neo-icon-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3.5px 3.5px 0px var(--border-color);
+  background-color: var(--bg-subtle);
+}
+
+.neo-icon-btn:active {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 0px 0px 0px var(--border-color);
+}
+
+.neo-icon-btn.edit-btn:hover {
+  background-color: var(--neo-yellow);
+  color: #000000;
+}
+
+.neo-icon-btn.delete-btn:hover {
+  background-color: var(--neo-coral);
+  color: #000000;
+}
+
+/* Badges */
+.neo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 1.5px 1.5px 0px var(--border-color);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.neo-badge-high {
+  background-color: var(--neo-coral);
+  color: #000000;
+}
+
+.neo-badge-med {
+  background-color: var(--neo-yellow);
+  color: #000000;
+}
+
+.neo-badge-low {
+  background-color: var(--neo-mint);
+  color: #000000;
+}
+
+.neo-badge-event {
+  background-color: var(--neo-pink);
+  color: #000000;
+}
+
+.neo-badge-assignment {
+  background-color: var(--neo-cyan);
+  color: #000000;
+}
+
+.neo-badge-exam {
+  background-color: var(--neo-orange);
+  color: #000000;
+}
+
+.neo-badge-project {
+  background-color: var(--neo-lavender);
+  color: #000000;
+}
+
+.neo-badge-lab {
+  background-color: var(--neo-mint);
+  color: #000000;
+}
+
+.neo-badge-reading {
+  background-color: #FEF08A;
+  color: #000000;
+}
+
+.neo-badge-course {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.course-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Neo-Brutalist Cards
+   ========================================================================== */
+
+.neo-card {
+  background-color: var(--bg-surface);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Welcome Banner */
+.welcome-banner {
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background-color: var(--bg-surface);
+  background-image: radial-gradient(var(--border-subtle) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+@media (max-width: 800px) {
+  .welcome-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.welcome-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.neo-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.neo-sticker-yellow {
+  background-color: var(--neo-yellow);
+  color: #000000;
+}
+
+.neo-sticker-pink {
+  background-color: var(--neo-pink);
+  color: #000000;
+}
+
+.welcome-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+
+.welcome-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+.overdue-highlight {
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.welcome-quick-status {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.status-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Summary Cards Grid */
+.neo-metrics-grid {
+  display: grid;
+  grid-templateColumns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.metric-card {
+  padding: 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  position: relative;
+}
+
+.metric-card-yellow {
+  border-left: 8px solid var(--neo-yellow);
+}
+
+.metric-card-mint {
+  border-left: 8px solid var(--neo-mint);
+}
+
+.metric-card-cyan {
+  border-left: 8px solid var(--neo-cyan);
+}
+
+.metric-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.metric-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+.metric-big-number {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.metric-subtext {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+/* ==========================================================================
+   Dashboard Calendar (Neo-Brutalist)
+   ========================================================================== */
+
+.calendar-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-header-bar {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border-width) solid var(--border-color);
+  background-color: var(--bg-surface);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.calendar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.calendar-badge {
+  padding: 0.4rem;
+}
+
+.calendar-month-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.calendar-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.today-jump-btn {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.calendar-layout-row {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+}
+
+@media (max-width: 960px) {
+  .calendar-layout-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calendar-month-pane {
+  padding: 1.25rem;
+  border-right: var(--border-width) solid var(--border-color);
+}
+
+@media (max-width: 960px) {
+  .calendar-month-pane {
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--border-color);
+  }
+}
+
+.calendar-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.calendar-weekday-cell {
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding: 0.4rem 0;
+  letter-spacing: 0.05em;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-day-btn {
+  background-color: var(--bg-surface);
+  border: var(--border-width-sm) solid var(--border-color);
+  border-radius: var(--radius-sm);
+  min-height: 64px;
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--border-color);
+  transition: all 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-align: left;
+}
+
+.calendar-day-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3.5px 3.5px 0px var(--border-color);
+  background-color: var(--bg-subtle);
+}
+
+.calendar-day-btn.other-month {
+  opacity: 0.35;
+  background-color: var(--bg-subtle);
+}
+
+/* Prominent TODAY Cell Styling */
+.calendar-day-btn.is-today {
+  background-color: var(--neo-yellow) !important;
+  color: #000000 !important;
+  border: 2.5px solid var(--border-color) !important;
+  box-shadow: 3.5px 3.5px 0px var(--border-color) !important;
+}
+
+.calendar-day-btn.is-selected {
+  outline: 3px solid var(--border-color);
+  outline-offset: 1px;
+}
+
+.day-btn-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.day-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: inherit;
+}
+
+.today-micro-tag {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 800;
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 1px 4px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+
+.calendar-dots-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+  min-height: 12px;
+  flex-wrap: wrap;
+}
+
+.calendar-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+}
+
+.calendar-dot-more {
+  font-size: 0.65rem;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Calendar Agenda Pane */
+.calendar-agenda-pane {
+  background-color: var(--bg-subtle);
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-agenda-header {
+  padding: 1.25rem;
+  border-bottom: var(--border-width-sm) solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+}
+
+.agenda-context-tag {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.calendar-agenda-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.calendar-agenda-list {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 480px;
+}
+
+/* ==========================================================================
+   Dashboard Split Grid & Item Cards
+   ========================================================================== */
+
+.dashboard-sections-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .dashboard-sections-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: var(--border-width) solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.section-title-large {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.section-subtitle,
+.today-date-subhead {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.section-card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Overdue banner box */
+.overdue-banner-box {
+  border: var(--border-width-sm) solid var(--border-color);
+  background-color: var(--danger-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.overdue-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #DC2626;
+  margin-bottom: 0.6rem;
+}
+
+.overdue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Task & Event Item Cards */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.neo-item-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2.5px 2.5px 0px var(--border-color);
+  transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neo-item-card:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0px var(--border-color);
+}
+
+.neo-item-card.completed {
+  opacity: 0.65;
+  background-color: var(--bg-subtle);
+}
+
+.neo-item-card.completed .item-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Pop-in smooth animation for newly added events */
+.pop-in-event {
+  animation: popInEvent 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes popInEvent {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(-12px);
+    box-shadow: 0 0 0 transparent;
+  }
+  60% {
+    transform: scale(1.02) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    box-shadow: 2.5px 2.5px 0px var(--border-color);
+  }
+}
+
+/* Neo Checkbox */
+.neo-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background-color: var(--bg-surface);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 1.5px 1.5px 0px var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neo-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.neo-checkbox.checked {
+  background-color: var(--neo-mint);
+  border-color: var(--border-color);
+}
+
+.item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  overflow: hidden;
+}
+
+.item-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.item-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.item-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.meta-time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.task-note-snippet {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 2px;
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Courses View Grid
+   ========================================================================== */
+
+.courses-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.neo-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card-accent-bar {
+  height: 8px;
+  width: 100%;
+  border-bottom: var(--border-width-sm) solid var(--border-color);
+}
+
+.course-card-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.course-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.course-card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.course-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.course-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.course-card-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: var(--border-width-sm) solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.course-term-pill {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Study Notes View
+   ========================================================================== */
+
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.neo-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.note-card {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.note-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.note-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.note-card-body-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  flex: 1;
+}
+
+.note-card-footer {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: var(--border-width-sm) solid var(--border-subtle);
+}
+
+.note-updated-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Profile & Settings
+   ========================================================================== */
+
+.profile-container,
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-hero {
+  padding: 1.75rem;
+  background-color: var(--bg-subtle);
+  border-bottom: var(--border-width) solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.profile-avatar-neo {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neo-yellow);
+  color: #000000;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 3px 3px 0px var(--border-color);
+}
+
+.profile-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.profile-hero-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.profile-hero-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.profile-hero-school {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.profile-form {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Forms & Inputs */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.neo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.neo-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.neo-input,
+.neo-select,
+.neo-textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  background-color: var(--bg-input);
+  border: var(--border-width-sm) solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0px var(--border-color);
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.neo-input:focus,
+.neo-select:focus,
+.neo-textarea:focus {
+  outline: none;
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3.5px 3.5px 0px var(--border-color);
+  background-color: var(--bg-surface);
+}
+
+.neo-color-swatches {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.color-swatch-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.color-swatch-btn:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch-btn.active {
+  transform: scale(1.15);
+  box-shadow: 3px 3px 0px var(--border-color);
+}
+
+.form-action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+/* Settings View Elements */
+.neo-card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: var(--border-width) solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.neo-card-body {
+  padding: 1.5rem;
+}
+
+.neo-info-box {
+  padding: 1.15rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.neo-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.neo-theme-option {
+  padding: 1.15rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: var(--shadow-hard-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  text-align: left;
+  transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neo-theme-option:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+  background-color: var(--bg-subtle);
+}
+
+.neo-theme-option.active {
+  background-color: var(--neo-yellow);
+  color: #000000;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+}
+
+.neo-theme-option.active .theme-opt-title,
+.neo-theme-option.active .theme-opt-desc {
+  color: #000000;
+}
+
+.theme-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  border: 1.5px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.theme-opt-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.theme-opt-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   Modals & Dialogs
+   ========================================================================== */
+
+.neo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  z-index: 100;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.neo-modal-dialog {
+  width: 100%;
+  max-width: 540px;
+  background-color: var(--bg-surface);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
+  overflow: hidden;
+  animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(16px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.neo-modal-header {
+  padding: 1.15rem 1.5rem;
+  border-bottom: var(--border-width) solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+}
+
+.neo-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.neo-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-height: calc(85vh - 120px);
+  overflow-y: auto;
+}
+
+.neo-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   Alerts, Empty States, & Toast Notifications
+   ========================================================================== */
+
+.neo-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-width-sm) solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.neo-alert-success {
+  background-color: var(--neo-mint);
+  color: #000000;
+}
+
+.neo-alert-danger {
+  background-color: var(--neo-coral);
+  color: #000000;
+}
+
+.neo-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.empty-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 0.35rem;
+}
+
+.empty-sub {
+  font-size: 0.825rem;
+  max-width: 320px;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.neo-toast {
+  position: fixed;
+  bottom: 1.75rem;
+  right: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--neo-yellow);
+  color: #000000;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-hard);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  z-index: 200;
+  animation: toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
